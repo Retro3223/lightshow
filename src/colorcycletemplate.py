@@ -1,4 +1,4 @@
-import apa102
+from subsystems import apa102
 import time
 
 class ColorCycleTemplate:
