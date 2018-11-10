@@ -10,8 +10,9 @@ class LEDSubsystem(Subsystem, APA102):
     def __init__(self):
         Subsystem.__init__(self)
         APA102.__init__(self,
-                        numLEDs=144,
-                        globalBrightness=5,
-                        order='rgb')
+                        num_led=144,
+                        global_brightness=5,
+                        order='rgb',
+                        max_speed_hz=1000000)
         LEDSubsystem.instance = self
 

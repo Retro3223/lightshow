@@ -1,0 +1,13 @@
+[Unit]
+Description=leds!
+After=network.target
+
+[Service]
+ExecStart=/usr/bin/python3 run.py
+WorkingDirectory=/home/pi/squiggly/src
+StandardOutput=inherit
+StandardError=inherit
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

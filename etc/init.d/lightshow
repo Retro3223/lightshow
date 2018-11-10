@@ -1,0 +1,35 @@
+#!/bin/bash
+
+### BEGIN INIT INFO
+# Provides:          lightshow
+# Required-Start:    
+# Required-Stop:     
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: led service
+# Description:       leds!
+### END INIT INFO
+
+source /etc/default/lightshow
+
+startthings() {
+    echo "starty $(date)" >> /home/pi/lighty
+	start-stop-daemon --pidfile=$PIDFILE -b -m --start --exec /usr/bin/python3 /home/pi/squiggly/src/run.py
+}
+
+stopthings() {
+    start-stop-daemon --pidfile=$PIDFILE --stop  && rm -f $PIDFILE
+}
+
+case "$1" in
+    start)
+        startthings
+        ;;
+    stop)
+        stopthings
+        ;;
+    force-reload|restart|reload)
+        stopthings
+        startthings
+        ;;
+esac

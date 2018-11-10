@@ -1,6 +1,4 @@
-from threading import Thread
-
-from commands.example import BlinkyCommand, OtherBlinkyCommand
+from commands.example import BlinkyCommand, OtherBlinkyCommand, StrafeCommand
 from controller import Controller
 from subsystems import LEDSubsystem
 from networktables import NetworkTables
@@ -12,15 +10,15 @@ logging.basicConfig(level=logging.DEBUG)
 class MyController(Controller):
     def __init__(self):
         super().__init__()
-        NetworkTables.initialize("10.32.23.10")
+        NetworkTables.initialize("10.32.23.14")
         self.table = NetworkTables.getTable("LEDS")
         self.table.addEntryListener(self.valueChanged)
         self.leds = LEDSubsystem()
 
-        self.leds.setDefaultCommand(BlinkyCommand())
+        self.leds.setDefaultCommand(StrafeCommand())
 
     def shutdown(self):
-        self.leds.clearStrip()
+        self.leds.clear_strip()
 
 
     def valueChanged(self, table, key, value, isNew):
@@ -28,8 +26,8 @@ class MyController(Controller):
             OtherBlinkyCommand().start()
 
 
-
-controller = MyController()
-controller.start()
+if __name__ == '__main__':
+    controller = MyController()
+    controller.start()
 
 

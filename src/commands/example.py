@@ -12,7 +12,7 @@ class BlinkyCommand(Command):
         self.state = False
 
     def initialize(self):
-        self.leds.clearStrip()
+        self.leds.clear_strip()
         self.timer.start()
 
     def execute(self):
@@ -20,9 +20,9 @@ class BlinkyCommand(Command):
         if self.timer.get() > 0.5:
             self.timer.reset()
             if self.state:
-                self.leds.setPixel(1, 135, 206, 250)
+                self.leds.set_pixel(1, 135, 206, 250)
             else:
-                self.leds.setPixel(1, 135, 0, 0)
+                self.leds.set_pixel(1, 135, 0, 0)
 
             self.state = not self.state
             self.leds.show()
@@ -31,7 +31,7 @@ class BlinkyCommand(Command):
         pass
 
     def end(self):
-        self.leds.clearStrip()
+        self.leds.clear_strip()
 
 
 class OtherBlinkyCommand(Command):
@@ -44,7 +44,7 @@ class OtherBlinkyCommand(Command):
         self.counter = 0
 
     def initialize(self):
-        self.leds.clearStrip()
+        self.leds.clear_strip()
         self.timer.start()
 
     def execute(self):
@@ -53,9 +53,9 @@ class OtherBlinkyCommand(Command):
             self.counter += 1
             self.timer.reset()
             if self.state:
-                self.leds.setPixel(1, 135, 206, 250)
+                self.leds.set_pixel(1, 135, 206, 250)
             else:
-                self.leds.setPixel(1, 0, 0, 234)
+                self.leds.set_pixel(1, 0, 0, 234)
 
             self.state = not self.state
             self.leds.show()
@@ -64,4 +64,43 @@ class OtherBlinkyCommand(Command):
         return self.counter > 10
 
     def end(self):
-        self.leds.clearStrip()
+        self.leds.clear_strip()
+
+
+class StrafeCommand(Command):
+    def __init__(self):
+        super().__init__()
+        self.leds = LEDSubsystem.getInstance()
+        self.requires(self.leds)
+        self.timer = wpilib.Timer()
+
+        self.color1 = (135, 206, 250)
+
+        self.pos = 0
+
+    def initialize(self):
+        self.leds.clear_strip()
+        self.timer.start()
+        self.paint()
+
+    def execute(self):
+        if self.timer.get() > 0.015:
+            print (self.timer.get())
+            self.timer.reset()
+            self.pos = (self.pos + 1) % self.leds.num_led
+            self.paint()
+        
+
+    def paint(self):
+        for i in range(0, self.leds.num_led):
+            self.leds.set_pixel(i, 0,0,0)
+        for i in range(self.pos, min(self.pos+10, self.leds.num_led)):
+            self.leds.set_pixel(i, *self.color1)
+
+        self.leds.show()
+
+    def isFinished(self):
+        return False
+
+    def end(self):
+        self.leds.clear_strip()
