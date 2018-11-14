@@ -33,6 +33,9 @@ git clone https://github.com/adafruit/Adafruit_Python_GPIO.git
 python setup.py install
 ```
 
+* pyfrc should be installed
+both on the pi and your workstation
+
 
 # Deploy
 
